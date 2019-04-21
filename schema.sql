@@ -16,7 +16,7 @@ CREATE TABLE youtube.stats.channel_stats
   videos BIGINT NOT NULL
 );
 
-SELECT create_hypertable('youtube.stats.channel_stats', 'time', 'serial', 32767);
+SELECT create_hypertable('youtube.stats.channel_stats', 'time', 'serial', 16);
 
 CREATE TABLE youtube.stats.video_stats
 (
@@ -29,7 +29,7 @@ CREATE TABLE youtube.stats.video_stats
   comments BIGINT NOT NULL
 );
 
-SELECT create_hypertable('youtube.stats.video_stats', 'time', 'channel_serial', 32767);
+SELECT create_hypertable('youtube.stats.video_stats', 'time', 'channel_serial', 16);
 
 create view space_usage as SELECT *, pg_size_pretty(total_bytes) AS total
  , pg_size_pretty(index_bytes) AS INDEX
