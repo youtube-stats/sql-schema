@@ -2,37 +2,34 @@ CREATE database youtube;
 \connect youtube
 CREATE SCHEMA stats;
 
-CREATE TABLE youtube.stats.channels(
-  serial CHAR(24) PRIMARY KEY NOT NULL
-);
-CREATE UNIQUE INDEX channels_serial_uindex ON youtube.stats.channels (serial);
-
-CREATE TABLE youtube.stats.subs
+CREATE TABLE youtube.stats.channels
 (
-    time TIMESTAMPTZ DEFAULT NOW() NOT NULL,
-    serial CHAR(24) NOT NULL,
-    subs BIGSERIAL NOT NULL
+    id SERIAL PRIMARY KEY NOT NULL,
+    serial CHAR(24) NOT NULL
 );
 
-SELECT create_hypertable('youtube.stats.subs', 'time', 'serial', 8);
+CREATE UNIQUE INDEX channels_id_uindex
+    ON stats.channels (id);
 
-CREATE TABLE youtube.stats.views
+CREATE UNIQUE INDEX channels_serial_uindex
+    ON stats.channels (serial);
+
+CREATE TABLE stats.metrics
 (
-    time TIMESTAMPTZ DEFAULT NOW() NOT NULL,
-    serial CHAR(24) NOT NULL,
-    views BIGSERIAL NOT NULL
+    time TIMESTAMPTZ DEFAULT NOW() PRIMARY KEY NOT NULL,
+    channel_id SERIAL NOT NULL
+        CONSTRAINT metrics_channels_id_fk
+            REFERENCES stats.channels
+            ON DELETE CASCADE,
+    subs SERIAL NOT NULL,
+    views SERIAL NOT NULL,
+    videos SERIAL NOT NULL
 );
 
-SELECT create_hypertable('youtube.stats.views', 'time', 'serial', 8);
+CREATE UNIQUE INDEX metrics_time_uindex
+    ON stats.metrics (time);
 
-CREATE TABLE youtube.stats.videos
-(
-    time TIMESTAMPTZ DEFAULT NOW() NOT NULL,
-    serial CHAR(24) NOT NULL,
-    videos BIGSERIAL NOT NULL
-);
-
-SELECT create_hypertable('youtube.stats.videos', 'time', 'serial', 8);
+SELECT create_hypertable('youtube.stats.metrics', 'time');
 
 create view space_usage as SELECT *, pg_size_pretty(total_bytes) AS total
  , pg_size_pretty(index_bytes) AS INDEX
