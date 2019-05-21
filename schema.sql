@@ -21,9 +21,9 @@ CREATE TABLE stats.metrics
         CONSTRAINT metrics_channels_id_fk
             REFERENCES stats.channels
             ON DELETE CASCADE,
-    subs SERIAL NOT NULL,
-    views SERIAL NOT NULL,
-    videos SERIAL NOT NULL
+    subs stats.uint4 NOT NULL,
+    views stats.uint8 NOT NULL,
+    videos stats.uint4 NOT NULL
 );
 
 CREATE UNIQUE INDEX metrics_time_uindex
