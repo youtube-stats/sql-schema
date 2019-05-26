@@ -9,27 +9,55 @@ CREATE TABLE youtube.stats.channels
 );
 
 CREATE UNIQUE INDEX channels_id_uindex
-    ON stats.channels (id);
+    ON youtube.stats.channels (id);
 
 CREATE UNIQUE INDEX channels_serial_uindex
-    ON stats.channels (serial);
+    ON youtube.stats.channels (serial);
 
-CREATE TABLE stats.metrics
+CREATE TABLE youtube.stats.metric_subs
 (
     time TIMESTAMPTZ DEFAULT NOW() PRIMARY KEY NOT NULL,
     channel_id SERIAL NOT NULL
         CONSTRAINT metrics_channels_id_fk
-            REFERENCES stats.channels
+            REFERENCES youtube.stats.channels
             ON DELETE CASCADE,
-    subs stats.uint4 NOT NULL,
-    views stats.uint8 NOT NULL,
-    videos stats.uint4 NOT NULL
+    subs youtube.stats.uint4 NOT NULL
 );
 
-CREATE UNIQUE INDEX metrics_time_uindex
-    ON stats.metrics (time);
+CREATE UNIQUE INDEX metric_subs_time_uindex
+    ON youtube.stats.metric_subs (time);
 
-SELECT create_hypertable('youtube.stats.metrics', 'time');
+SELECT create_hypertable('youtube.stats.metric_subs', 'time');
+
+CREATE TABLE youtube.stats.metric_views
+(
+    time TIMESTAMPTZ DEFAULT NOW() PRIMARY KEY NOT NULL,
+    channel_id SERIAL NOT NULL
+        CONSTRAINT metrics_channels_id_fk
+            REFERENCES youtube.stats.channels
+            ON DELETE CASCADE,
+    views youtube.stats.uint8 NOT NULL
+);
+
+CREATE UNIQUE INDEX metric_views_time_uindex
+    ON youtube.stats.metric_views (time);
+
+SELECT create_hypertable('youtube.stats.metric_views', 'time');
+
+CREATE TABLE youtube.stats.metric_videos
+(
+    time TIMESTAMPTZ DEFAULT NOW() PRIMARY KEY NOT NULL,
+    channel_id SERIAL NOT NULL
+        CONSTRAINT metrics_channels_id_fk
+            REFERENCES youtube.stats.channels
+            ON DELETE CASCADE,
+    videos youtube.stats.uint4 NOT NULL
+);
+
+CREATE UNIQUE INDEX metric_videos_time_uindex
+    ON youtube.stats.metric_videos (time);
+
+SELECT create_hypertable('youtube.stats.metric_videos', 'time');
 
 create view space_usage as SELECT *, pg_size_pretty(total_bytes) AS total
  , pg_size_pretty(index_bytes) AS INDEX
