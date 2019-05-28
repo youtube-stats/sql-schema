@@ -21,7 +21,7 @@ CREATE TABLE youtube.stats.metric_subs
         CONSTRAINT metrics_channels_id_fk
             REFERENCES youtube.stats.channels
             ON DELETE CASCADE,
-    subs youtube.stats.uint4 NOT NULL
+    subs INTEGER NOT NULL
 );
 
 CREATE UNIQUE INDEX metric_subs_time_uindex
@@ -36,7 +36,7 @@ CREATE TABLE youtube.stats.metric_views
         CONSTRAINT metrics_channels_id_fk
             REFERENCES youtube.stats.channels
             ON DELETE CASCADE,
-    views youtube.stats.uint8 NOT NULL
+    views BIGINT NOT NULL
 );
 
 CREATE UNIQUE INDEX metric_views_time_uindex
@@ -51,7 +51,7 @@ CREATE TABLE youtube.stats.metric_videos
         CONSTRAINT metrics_channels_id_fk
             REFERENCES youtube.stats.channels
             ON DELETE CASCADE,
-    videos youtube.stats.uint4 NOT NULL
+    videos INTEGER NOT NULL
 );
 
 CREATE UNIQUE INDEX metric_videos_time_uindex
