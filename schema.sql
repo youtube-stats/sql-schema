@@ -17,7 +17,7 @@ CREATE UNIQUE INDEX channels_serial_uindex
 CREATE TABLE youtube.stats.metric_subs
 (
     time TIMESTAMPTZ DEFAULT NOW() PRIMARY KEY NOT NULL,
-    channel_id SERIAL NOT NULL
+    id SERIAL NOT NULL
         CONSTRAINT metrics_channels_id_fk
             REFERENCES youtube.stats.channels
             ON DELETE CASCADE,
@@ -32,7 +32,7 @@ SELECT create_hypertable('youtube.stats.metric_subs', 'time');
 CREATE TABLE youtube.stats.metric_views
 (
     time TIMESTAMPTZ DEFAULT NOW() PRIMARY KEY NOT NULL,
-    channel_id SERIAL NOT NULL
+    id SERIAL NOT NULL
         CONSTRAINT metrics_channels_id_fk
             REFERENCES youtube.stats.channels
             ON DELETE CASCADE,
@@ -47,7 +47,7 @@ SELECT create_hypertable('youtube.stats.metric_views', 'time');
 CREATE TABLE youtube.stats.metric_videos
 (
     time TIMESTAMPTZ DEFAULT NOW() PRIMARY KEY NOT NULL,
-    channel_id SERIAL NOT NULL
+    id SERIAL NOT NULL
         CONSTRAINT metrics_channels_id_fk
             REFERENCES youtube.stats.channels
             ON DELETE CASCADE,
