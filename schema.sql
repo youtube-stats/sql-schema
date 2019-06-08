@@ -16,7 +16,7 @@ CREATE UNIQUE INDEX channels_serial_uindex
 
 CREATE TABLE youtube.stats.subs
 (
-    time TIMESTAMPTZ DEFAULT NOW() PRIMARY KEY NOT NULL,
+    time TIMESTAMPTZ DEFAULT NOW() NOT NULL,
     id SERIAL NOT NULL
         CONSTRAINT metrics_channels_id_fk
             REFERENCES youtube.stats.channels
@@ -25,30 +25,6 @@ CREATE TABLE youtube.stats.subs
 );
 
 SELECT create_hypertable('youtube.stats.subs', 'time');
-
-CREATE TABLE youtube.stats.views
-(
-    time TIMESTAMPTZ DEFAULT NOW() PRIMARY KEY NOT NULL,
-    id SERIAL NOT NULL
-        CONSTRAINT metrics_channels_id_fk
-            REFERENCES youtube.stats.channels
-            ON DELETE CASCADE,
-    views BIGINT NOT NULL
-);
-
-SELECT create_hypertable('youtube.stats.views', 'time');
-
-CREATE TABLE youtube.stats.videos
-(
-    time TIMESTAMPTZ DEFAULT NOW() PRIMARY KEY NOT NULL,
-    id SERIAL NOT NULL
-        CONSTRAINT metrics_channels_id_fk
-            REFERENCES youtube.stats.channels
-            ON DELETE CASCADE,
-    videos INTEGER NOT NULL
-);
-
-SELECT create_hypertable('youtube.stats.videos', 'time');
 
 create view space_usage as SELECT *, pg_size_pretty(total_bytes) AS total
  , pg_size_pretty(index_bytes) AS INDEX
